@@ -1,0 +1,34 @@
+:root{
+  --primaryGreen : #3D9970;
+  --lightDark : #043447;
+  --blue:  #18425D;
+  --red : #EB6753;
+  --darkGreen: #035A33;
+  --grey: #8D8D8D;
+  
+
+
+
+
+
+
+
+
+
+
+}
+
+*{
+  text-decoration: none;
+  list-style-type: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+}
+a{
+  text-decoration: none !important;
+}
+.flex {
+  display: flex;
+}
