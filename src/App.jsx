@@ -7,9 +7,9 @@ import PropertiesDetails from "./pages/User/PropertiesDetails";
 import Signup from "./pages/User/Signup";
 import Login from "./pages/User/Login";
 import Inspection from "./pages/User/Inspection";
+import Private from "./components/Private";
 
 // admin routes
-
 import ErrorPage from "./pages/ErrorPage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AddNewProperties from "./pages/Admin/AddNewProperties";
@@ -19,6 +19,7 @@ import AdminPropertyDetails from "./pages/Admin/AdminPropertyDetails";
 import AdminPropertyEdit from "./pages/Admin/AdminPropertyEdit";
 import SignupForm from "./pages/Admin/AdminSignupForm";
 import SigninForm from "./pages/Admin/AdminSigninForm";
+import AdminPrivate from "./components/AdminPrivate";
 
 function App() {
   return (
@@ -29,7 +30,6 @@ function App() {
             {/* User Routes */}
             <Route path="/" element={<Homepage />} />
             <Route path="/properties" element={<Properties />} />
-            <Route path="/contact" element={<Contact />} />
             <Route
               path="/properties/:propertyId"
               element={<PropertiesDetails />}
@@ -37,29 +37,35 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+
+            <Route element={<Private/>}>
+
             <Route path="/inspection" element={<Inspection />} />
+            </Route>
 
             {/* Admin Routes */}
+            <Route path="/admin" element={<SigninForm />} />
+
             <Route path="/admin/login" element={<SigninForm />} />
             <Route path="/admin/signup" element={<SignupForm />} />
 
             {/* ADMIN DASHBOARD ROUTES */}
+            
+            <Route element={<AdminPrivate/>}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/add" element={<AddNewProperties />} />
 
             <Route path="/admin/inspection" element={<AdminInspection />} />
             <Route path="/admin/properties" element={<AdminProperties />} />
             <Route
-              path="/admin/PropertiesEdit/:propertyId"
+              path="/admin/edit/:propertyId"
               element={<AdminPropertyEdit />}
             />
             <Route
               path="/admin/properties/:propertyId"
               element={<AdminPropertyDetails />}
             />
-
-            {/* <Route path="/admin/signup" element={<SignupForm />} />
-            <Route path="/admin/login" element={<SigninForm />} /> */}
+            </Route>
 
             {/* Error Route */}
             <Route path="*" element={<ErrorPage />} />

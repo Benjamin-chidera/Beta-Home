@@ -4,8 +4,17 @@ import { IoSearch } from "react-icons/io5";
 import { HiOutlineBell } from "react-icons/hi";
 import { TiThMenu } from "react-icons/ti";
 import "../../styles/Admin Styles/AdminNavbar.css";
+import { useNavigate } from "react-router-dom";
+
 
 const AdminNavbar = () => {
+  const redirect = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    redirect("/admin/login")
+  }
+
   return (
     <div className="py-3 pe-2  pe-lg-5">
       <header className="AdminNavbarContainer d-flex justify-content-between align-items-center">
@@ -17,18 +26,17 @@ const AdminNavbar = () => {
         </div>
 
         <div className="NavbarAdminInfo d-flex align-items-center gap-lg-5 gap-sm-4 ">
-
-            {/* <button className="bg-success-subtle border-0 py-2 px-3 me-2  rounded">
+          {/* <button className="bg-success-subtle border-0 py-2 px-3 me-2  rounded">
           <TiThMenu className="text-success"/>
           </button> */}
-            <div className="line"></div>
+          <div className="line"></div>
           <div className="AdminNavInfo d-flex align-items-center justify-content-center  gap-2 ">
             <div className="d-flex flex-column justify-content-center  ">
-              <p className="fw-bold">Henry Osas</p>
+              <p className="fw-bold">Admin Admin</p>
               <p className="fw-light ">Admin</p>
             </div>
 
-            <img src={AdminPic} alt="adminpic" />
+            <button className="btn btn-danger btn-sm" onClick={handleLogout}>Log Out</button>
           </div>
         </div>
       </header>

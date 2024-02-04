@@ -5,8 +5,41 @@ import home from "../../assets/images/home.png";
 import Vector from "../../assets/images/Vector.png";
 import { GoHome } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Loading from "../../components/Loading"
+import axios from "axios"
+import { useGlobalContext } from "../../Hooks/useGlobalContext";
+import {ToastContainer, toast} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 const AdminInspection = () => {
+  const [isloading, setIsLoading] = useState(true)
+  const [inspections, setInspections] = useState([])
+  const {BASE_URL} = useGlobalContext()
+
+  const token = localStorage.getItem("token")
+
+  const getInspection = async() => {
+try {
+  const {data} = await axios(`${BASE_URL}/inspection`, {
+    headers : {Authorization: `Bearer ${token}`}
+  })
+
+  setInspections(data.inspec);
+  console.log(data.inspec);
+  setIsLoading(false)
+} catch (error) {
+  console.log(error);
+  toast.error(error.response?.data?.err)
+
+  }}
+
+  useEffect(() => {
+    getInspection()
+  }, [])
+
+ 
+
   return (
     <div>
       <AdminLayout>
@@ -24,7 +57,7 @@ const AdminInspection = () => {
         <div>
           <p className="dots fw-bold">
             <span>
-              <img src={Vector} alt="" />
+              <img src={Vector} alt="" className="me-2" />
             </span>
             History
           </p>
@@ -42,21 +75,22 @@ const AdminInspection = () => {
               </tr>
             </thead>
             <tbody>
-              {inspections.map((i, index) => {
+              {!isloading && inspections.length < 1 && <h1 className=" text-center fw-bold mt-3 text-secondary fs-5">No Inspection Booked Yet</h1>}
+              {isloading ? <Loading/> : inspections.map((i, index) => {
                 return (
                   <tr key={index}>
                     <th scope="row"> {index + 1} </th>
                     <td className="data1">
                       {" "}
-                      <p className="fw-bold mb-0"> {i.name} </p>{" "}
+                      <p className="fw-bold mb-0"> {i.firstName} {i.lastName}</p>{" "}
                       <p className="my-0 fw-light ">{i.phoneNumber} </p>{" "}
                     </td>
                     <td className="fw-bold"> {i.email} </td>
                     <td className="fw-bold"> {i.location} </td>
                     <td>
                       {" "}
-                      <p className="fw-bold mb-0">{i.date}</p>
-                      <p className="my-0 fw-light ">{i.time}</p>{" "}
+                      <p className="fw-bold mb-0">{new Date(i.inspectionDate).toDateString()}</p>
+                      <p className="my-0 fw-light ">{i.inspectionTime}</p>{" "}
                     </td>
                   </tr>
                 );

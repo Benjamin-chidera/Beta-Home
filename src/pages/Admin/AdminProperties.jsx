@@ -96,7 +96,7 @@ const AdminProperties = () => {
                       </p>
                     </div>
                     <Link to={`/admin/properties/${h._id}`}>
-                      <button className="dashBoardButton">View Button</button>
+                      <button className="dashBoardButton">View</button>
                     </Link>
                   </div>
                 );

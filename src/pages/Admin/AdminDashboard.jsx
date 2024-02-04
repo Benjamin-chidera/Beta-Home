@@ -83,7 +83,9 @@ const AdminDashboard = () => {
                   </p>
                 </p>
                 <div>
-                  <button className="AdminDashBtn">view button</button>
+                  <Link to={`/admin/properties/${h._id}`}>
+                    <button className="AdminDashBtn">View</button>
+                  </Link>
                 </div>
               </div>
             );
