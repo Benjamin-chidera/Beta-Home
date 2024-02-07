@@ -5,77 +5,78 @@ import { SlCalender } from "react-icons/sl";
 import { useState } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
-import {ToastContainer, toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Inspection = () => {
-const {BASE_URL} = useGlobalContext()
+  const { Base_Url } = useGlobalContext()
   const [inspection, setInspection] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    location: "",
-    inspectionDate: "",
-    inspectionTime: "",
-    message: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    location: '',
+    inspectionDate: '',
+    inspectionTime: '',
+    message: '',
   })
+
   const [clicked, setClicked] = useState(false)
 
-
-
-  const handleChange = (e) => {
-    setInspection({...inspection, [e.target.name]: e.target.value})
+  const handlechange = (e) => {
+    setInspection({ ...inspection, [e.target.name]: e.target.value })
   }
 
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem('token')
 
-  const handleInspection = async(e) => {
-    setClicked(true)
+  const handleInspectionSubmit = async (e) => {
     e.preventDefault()
-
+    setClicked(false)
     try {
-      const {data} = await axios.post(`${BASE_URL}/inspection`, {...inspection}, {
+      const { data } = await axios.post(`${Base_Url}/inspection`, 
+      {
+         ...inspection 
+      },
+      {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      )
 
-      if (data) {
-        toast.success("Inspection submitted")
-        console.log(data);
-        
+      if (data.success) {
+        toast.success('Inspection submitted successfully')
+        setClicked(false)
         setInspection({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          location: "",
-          inspectionDate: "",
-          inspectionTime: "",
-          message: "",
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          location: '',
+          inspectionDate: '',
+          inspectionTime: '',
+          message: '',
         })
       }
     } catch (error) {
-      console.log(error);
-      setClicked(false)
+      console.log(error)
       toast.error(error.response?.data?.err)
+      setClicked(false)
       setInspection({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        location: "",
-        inspectionDate: "",
-        inspectionTime: "",
-        message: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        location: '',
+        inspectionDate: '',
+        inspectionTime: '',
+        message: '',
       })
     }
   }
-
   return (
     <div>
-      
+      <ToastContainer />
       <div className="container py-4 ">
         <div className="text-center">
           <h3>BOOK AN INSPECTION WITH US</h3>
@@ -85,8 +86,7 @@ const {BASE_URL} = useGlobalContext()
         </div>
 
         <div className="container py-3 ">
-          <ToastContainer/>
-          <form onSubmit={handleInspection}>
+          <form onSubmit={handleInspectionSubmit}>
             <div className="d-block d-md-flex gap-2">
               <div className=" border position-relative  rounded-3 border-dark d-flex gap-1  justify-content-center align-items-center w-100   shadow shadow-sm">
                 <FaUser className="text-success fs-5 position-absolute start-0 ms-2  " />
@@ -96,7 +96,8 @@ const {BASE_URL} = useGlobalContext()
                   placeholder="First Name"
                   name="firstName"
                   value={inspection.firstName}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
               <div>
@@ -112,7 +113,8 @@ const {BASE_URL} = useGlobalContext()
                   placeholder="Last Name"
                   name="lastName"
                   value={inspection.lastName}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
             </div>
@@ -128,7 +130,8 @@ const {BASE_URL} = useGlobalContext()
                   placeholder="Email-address"
                   name="email"
                   value={inspection.email}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
             </div>
@@ -145,7 +148,8 @@ const {BASE_URL} = useGlobalContext()
                   placeholder="Phone Number"
                   name="phoneNumber"
                   value={inspection.phoneNumber}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
             </div>
@@ -161,7 +165,8 @@ const {BASE_URL} = useGlobalContext()
                   placeholder="Location"
                   name="location"
                   value={inspection.location}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
             </div>
@@ -176,7 +181,8 @@ const {BASE_URL} = useGlobalContext()
                   className="border-0 px-5 py-3 shadow-none form-control h-100"
                   name="inspectionDate"
                   value={inspection.inspectionDate}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
               <div>
@@ -191,7 +197,8 @@ const {BASE_URL} = useGlobalContext()
                   className="border-0 px-5 py-3 shadow-none form-control h-100"
                   name="inspectionTime"
                   value={inspection.inspectionTime}
-                  onChange={handleChange}
+                  onChange={handlechange}
+                  required
                 />
               </div>
             </div>
@@ -201,7 +208,7 @@ const {BASE_URL} = useGlobalContext()
             <div>
               <div className="dark position-relative  border rounded-3 border-dark border gap-1 rounded-3 border-dark d-flex justify-content-center align-items-start w-100 shadow shadow-md ">
                 <MdTextsms className="text-success mt-2 fs-5 position-absolute start-0 ms-2  " />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn 
+
                 <textarea
                   cols="30"
                   rows="10"
@@ -209,7 +216,7 @@ const {BASE_URL} = useGlobalContext()
                   placeholder=" Additional Message"
                   name="message"
                   value={inspection.message}
-                  onChange={handleChange}
+                  onChange={handlechange}
                 ></textarea>
               </div>
             </div>
@@ -220,7 +227,7 @@ const {BASE_URL} = useGlobalContext()
                 className="btn rounded-3 text-white fs-6 py-2 my-3 w-50"
                 style={{ backgroundColor: "#3D9970" }}
               >
-                {clicked ? "SUBMITTING" : "SUBMIT"}
+                {clicked ? 'Submiting....' : 'Submit'}
               </button>
             </div>
           </form>

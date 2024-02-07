@@ -6,44 +6,44 @@ import Vector from "../../assets/images/Vector.png";
 import { GoHome } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Loading from "../../components/Loading"
-import axios from "axios"
+import Loading from '../../components/Loading'
+import axios from "axios";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
-import {ToastContainer, toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const AdminInspection = () => {
-  const [isloading, setIsLoading] = useState(true)
-  const [inspections, setInspections] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [inspections, setInpections] = useState([])
   const {BASE_URL} = useGlobalContext()
+  const token = localStorage.getItem('token')
 
-  const token = localStorage.getItem("token")
+  const getInspection = async () => {
 
-  const getInspection = async() => {
-try {
-  const {data} = await axios(`${BASE_URL}/inspection`, {
-    headers : {Authorization: `Bearer ${token}`}
-  })
-
-  setInspections(data.inspec);
-  console.log(data.inspec);
-  setIsLoading(false)
-} catch (error) {
-  console.log(error);
-  toast.error(error.response?.data?.err)
-
-  }}
+      try {
+        const { data } = await axios(`${BASE_URL}/inspection`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setInpections(data.inspection)
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error)
+        toast.error(error.response?.data?.err)
+      }
+  }
 
   useEffect(() => {
-    getInspection()
+      getInspection()
   }, [])
 
- 
+  console.log(inspections);
 
   return (
     <div>
       <AdminLayout>
         <div className="topsec">
+          <ToastContainer/>
           <div className="d-flex gap-4 justify-content-start  justify-content-md-between align-items-center pe-2 inpectionHome my-2">
             <h4>Inspection History</h4>
             <div className="d-flex align-items-center gap-1">
@@ -75,14 +75,17 @@ try {
               </tr>
             </thead>
             <tbody>
-              {!isloading && inspections.length < 1 && <h1 className=" text-center fw-bold mt-3 text-secondary fs-5">No Inspection Booked Yet</h1>}
-              {isloading ? <Loading/> : inspections.map((i, index) => {
+
+              {/* {
+                !isLoading && inspections.length > 1 && <h1 className="text-center fw-bold mt-3 fs-6 text-danger">No Inspection Booked yet</h1>
+              } */}
+              {isLoading ? <Loading/> :  inspections.map((i, index) => {
                 return (
                   <tr key={index}>
                     <th scope="row"> {index + 1} </th>
                     <td className="data1">
                       {" "}
-                      <p className="fw-bold mb-0"> {i.firstName} {i.lastName}</p>{" "}
+                      <p className="fw-bold mb-0"> {i.firstName}{i.lastName} </p>{" "}
                       <p className="my-0 fw-light ">{i.phoneNumber} </p>{" "}
                     </td>
                     <td className="fw-bold"> {i.email} </td>

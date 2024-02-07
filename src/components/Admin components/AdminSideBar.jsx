@@ -14,7 +14,7 @@ const AdminSideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [active, setActive]= useState('')
   const location = useLocation()
-  
+  // console.log(location);
   const paths = {
     dashboard: '/admin/dashboard',
     allprops: '/admin/properties',

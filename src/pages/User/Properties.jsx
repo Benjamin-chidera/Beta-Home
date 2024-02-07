@@ -5,6 +5,7 @@ import UserPropertyDiscover from "../../components/User components/PropertiesSub
 import UserFooter from "../../components/User components/UserFooter";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { useEffect } from "react";
+import userDiscover from '../../components/User components/HomeSubComponents/UserDiscover'
 
 const Properties = () => {
   const { isDark } = useGlobalContext();

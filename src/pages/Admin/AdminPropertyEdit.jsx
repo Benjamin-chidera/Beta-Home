@@ -20,7 +20,7 @@ import { LuBath } from "react-icons/lu";
 import { FaCar } from "react-icons/fa";
 import ReactPlayer from "react-player";
 
-const AdminPropertyEdit = () => { 
+const AdminPropertyEdit = () => {
   const [images, setImages] = useState({
     img1: adminEdit1,
     img2: adminEdit2,

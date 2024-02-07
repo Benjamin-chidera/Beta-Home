@@ -1,8 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { properties } from "./mockData/properties";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-
+import axios from "axios";
 export const AppContext = createContext();
 
 const CustomPrevArrow = (props) => (
@@ -36,8 +36,28 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const BASE_URL = "https://betahome.onrender.com/api/v1/"
 
+  const Base_Url = "https://lateefapi.onrender.com/api/v1"
+  const [location, setLocation] = useState("")
+  const [type, setType] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [properties, setProperties] = useState([])
+  const [bed, setBed] = useState("")
+  const url  = `${Base_Url}/property?location=${location}&type=${type}&bedroom=${bed}`
+
+  
+  const getPropertiues = async () => {
+    try {
+      const {data } = await axios(url)
+      setProperties(data .properties)
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(()=> {
+    getPropertiues()
+  }, [type, location, bed])
   return (
     <AppContext.Provider
       value={{
@@ -48,7 +68,11 @@ const AppProvider = ({ children }) => {
         isDark,
         setIsDark,
         setLightMode,
-        BASE_URL
+        Base_Url,
+        setLocation,
+        setType, 
+        isLoading,
+        setBed
       }}
     >
       {children}

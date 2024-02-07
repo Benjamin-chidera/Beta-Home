@@ -2,22 +2,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import House from "../../assets/images/House.png";
 import "../../styles/Admin Styles/signupform.css";
 import search from "../../assets/images/search.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import { useGlobalContext } from "../../Hooks/useGlobalContext";
+import { useNavigate } from "react-router-dom";
 
 const SigninForm = () => {
+  const {Base_Url} = useGlobalContext()
+  const redirect = useNavigate()
   const [show, setShow] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const redirect = useNavigate();
-  const [clicked, setClicked] = useState(false);
-  const { isDark, BASE_URL } = useGlobalContext();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [clicked, setClicked] = useState(false)
+
 
   const togglePassword = (e) => {
     e.preventDefault();
@@ -26,32 +28,30 @@ const SigninForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setClicked(true);
+    setClicked(true)
 
     try {
-      const { data } = await axios.post(`${BASE_URL}/login`, {
-        email,
-        password,
-      });
-      if (data) {
-        toast.success("Successfully logged in");
-        redirect("/admin/dashboard");
-        localStorage.setItem("token", data.user.token);
-        setClicked(false);
-        setEmail("");
-        setPassword("");
+      const { data } = await axios.post(`${Base_Url}/login`, { email, password })
+      if (data.success) {
+        setClicked(false)
+        toast.success("Login Success")
+        redirect("/admin/dashboard")
+        localStorage.setItem("token", data.token)
+
       }
     } catch (error) {
-      toast.error(error.response?.data?.msg);
-      setClicked(false);
-      setEmail("");
-      setPassword("");
-    }
-  };
+      toast.error(error.response?.data?.message)
+      console.log(error)
+      setClicked(false)
+      setEmail("")
+      setPassword("")
 
+    }
+
+  }
   return (
     <div className="d-flex justify-content-center vh-100 w-100">
-      <ToastContainer />
+      <ToastContainer/>
       <div className="input-field bg-light p-3 p-md-5 col-md-6 col-12 ">
         <div className="header lh-1 mb-4 text-center text-md-start">
           <p className="text fw-bold fs-4">Sign in to your admin account.</p>
@@ -103,7 +103,6 @@ const SigninForm = () => {
               type="checkbox"
               value=""
               id="flexCheckDefault"
-              required
             />
             <label className="form-check-label " htmlFor="flexCheckDefault">
               Remember me
@@ -114,7 +113,7 @@ const SigninForm = () => {
             type="submit"
             className="btn btn-success text-center w-100 btn-lg"
           >
-            {clicked ? "Signing in" : "Sign in"}
+            {clicked ? 'Signing in......' : 'Sign in'}
           </button>
         </form>
 

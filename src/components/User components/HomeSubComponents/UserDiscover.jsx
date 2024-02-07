@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from '../../../Hooks/useGlobalContext';
 // import Carousel from 'react-multi-carousel';
 import Slider from "react-slick";
@@ -9,6 +9,9 @@ import "../../../styles/User Styles/UserDiscover.css";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import axios from 'axios';
+import Loading from '../../Loading'
+import { formatPrice } from '../../../utils/helpers';
 
 const CustomPrevArrow = (props) => (
     <div
@@ -29,10 +32,23 @@ const CustomPrevArrow = (props) => (
   );
 
 
-const UserDiscover = () => {
-    const {properties} = useGlobalContext();
+  
+  const UserDiscover = () => {
+    const {properties, Base_Url} = useGlobalContext();
     const [ discover, setDiscover] = useState(properties);
-
+    const [isLoading, setIsLoading] = useState(true)
+    const getProperties = async () => {
+      try {
+        const {data} = await axios(`${Base_Url}/property`)
+        setDiscover(data.properties.slice(0, 7))
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    useEffect(() => {
+      getProperties()
+    },[])
         const settings = {
           // dots: false,
           infinite: true,
@@ -86,26 +102,30 @@ const UserDiscover = () => {
           ]
         };
         
-
+       
+      if (isLoading) {
+        return <Loading/>
+      }
+    
   return (
     <section className='userdiscover-cover mt-5 '>
         <h1 className='text-center discoverH1' >Discover Our Popular Properties</h1>
+            {/* <CustomPrevArrow/> */}
             <Slider {...settings} className=' mt-5 '>
-            <CustomPrevArrow/>
             {discover.map((dis)=>{
-                const {_id, image, title, location, price} = dis ;
+                const {_id, media:{images}, title, location, price, bedroom, bathroom, squareFeet} = dis ;
                 return<div className="cards"  key={_id}>
                          
-                         <img src={image} alt={title} /> 
+                         <img src={images[0]} alt={title} /> 
                          <div className='card-bottom'>
                              <h4>{title}</h4>
-                             <h4>{price}</h4>
+                             <h4>{formatPrice(price)}</h4>
                              <div className="features">
-                                <p>6 Bed</p>
+                                <p>{bedroom}</p>
                                 <div className='userdiscover-line'></div>
-                                <p>3 Bath</p>
+                                <p>{bathroom}</p>
                                 <div className='userdiscover-line'></div>
-                                <p>720 sq ft</p>
+                                <p>{squareFeet}</p>
                              </div>
                              <div className="location">
                              <MdLocationOn size={22} />
@@ -115,7 +135,7 @@ const UserDiscover = () => {
                          
                       </div>
             })}
-            <CustomNextArrow/>
+            {/* <CustomNextArrow/> */}
             </Slider>
     </section>
   )

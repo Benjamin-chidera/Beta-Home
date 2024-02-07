@@ -32,7 +32,7 @@ a {
 
 .DarkMode {
   color: white !important;
-  background: #413838 !important;
+  background: #000 !important;
 }
 
 .DarkMode .UserPropertyRelatedCard a {

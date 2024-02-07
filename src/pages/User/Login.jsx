@@ -1,23 +1,24 @@
 // import House from "../../assets/images/House.png";
 import "../../styles/User Styles/Login.css";
+import { FcGoogle } from "react-icons/fc";
 import House from "../../assets/images/House.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
-// import "../../styles/Admin Styles/AdminSignupForm.css";
-// import search from "../../assets/images/search.png";
-import {ToastContainer, toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+;
 
 const Login = () => {
-  const { isDark, BASE_URL } = useGlobalContext();
-  const [show, setShow] = useState(true);
+  const redirect = useNavigate()
+  const { isDark, Base_Url } = useGlobalContext();
+  const [show, setShow] = useState(false);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const redirect = useNavigate()
   const [clicked, setClicked] = useState(false)
 
   const togglePassword = (e) => {
@@ -25,31 +26,28 @@ const Login = () => {
     setShow(!show);
   };
 
-const handleLogin = async(e) => {
-  e.preventDefault()
-  setClicked(true)
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setClicked(true)
+    try {
+      const { data } = await axios.post(`${Base_Url}/login`, { email, password })
+      if (data.success) {
+        setClicked(false)
+        toast.success("Login Success")
+        redirect("/inspection")
+        localStorage.setItem("token", data.token)
 
-
-  try {
-    const {data} = await axios.post(`${BASE_URL}/login`, {email, password})
-    if (data) {
-    toast.success("Successfully logged in")
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message)
+      console.log(error)
       setClicked(false)
-      // redirect("/inspection")
-      console.log(data);
-      localStorage.setItem("token", data.user.token)
-      setEmail("");
-      setPassword("");
+      setEmail("")
+      setPassword("")
+
     }
-    
-  } catch (error) {
-    console.log(error);
-    setClicked(false)
-    setEmail("")
-    setPassword("")
-    toast.error(error.response?.data?.msg)
   }
-}
+
 
   return (
     <div className={isDark ? "DarkMode" : null}>
@@ -97,7 +95,7 @@ const handleLogin = async(e) => {
                   style={{ right: "7px", backgroundColor: "transparent" }}
                   onClick={togglePassword}
                 >
-                  {show ? <FaEyeSlash /> : <IoEyeSharp />}
+                  {show ? <IoEyeSharp /> : <FaEyeSlash />  }
                 </button>
               </div>
 
@@ -117,7 +115,7 @@ const handleLogin = async(e) => {
                 type="submit"
                 className="btn btn-success text-center w-100 btn-lg"
               >
-               { clicked ? "Signing In" : " Sign in"}
+                {clicked ? 'Signing in......' : 'Sign in'}
               </button>
             </form>
 

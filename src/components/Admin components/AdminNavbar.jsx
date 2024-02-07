@@ -6,15 +6,13 @@ import { TiThMenu } from "react-icons/ti";
 import "../../styles/Admin Styles/AdminNavbar.css";
 import { useNavigate } from "react-router-dom";
 
-
 const AdminNavbar = () => {
   const redirect = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    redirect("/admin/login")
+    localStorage.removeItem('token')
+    redirect('/admin/login')
   }
-
   return (
     <div className="py-3 pe-2  pe-lg-5">
       <header className="AdminNavbarContainer d-flex justify-content-between align-items-center">
@@ -36,7 +34,7 @@ const AdminNavbar = () => {
               <p className="fw-light ">Admin</p>
             </div>
 
-            <button className="btn btn-danger btn-sm" onClick={handleLogout}>Log Out</button>
+            <button onClick={handleLogout} className="btn btn-danger">Log Out</button>
           </div>
         </div>
       </header>

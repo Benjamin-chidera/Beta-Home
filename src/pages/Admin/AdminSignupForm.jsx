@@ -1,95 +1,75 @@
 import House from "../../assets/images/House.png";
 import "../../styles/Admin Styles/signupform.css";
 import search from "../../assets/images/search.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
-import {ToastContainer, toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import axios from "axios";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
-  const { isDark, BASE_URL } = useGlobalContext();
+  const redirect = useNavigate()
+  const {BASE_URL} = useGlobalContext()
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [user, setUser] = useState({
-    password: "",
-    email: "", 
-    confirmPassword: "",
-    role: "admin"
+    password: '',
+    email: '',
+    confirmPassword: '',
+    role: 'admin'
   })
-  
-  const [clicked, setClicked] = useState(false)
-  const redirect = useNavigate()
+
+  const [clicked, setClicked] = useState(false);
 
   const handleChange = (e) => {
-    setUser({...user, [e.target.name] : e.target.value})
+    setUser({ ...user, [e.target.name]: e.target.value })
   }
-
-
-
   const togglePassword = (e) => {
     e.preventDefault();
     setShow(!show);
   };
-
   const togglePassword2 = (e) => {
     e.preventDefault();
     setShow2(!show2);
   };
 
-
-  const handleRegister = async(e) => {
-    e.preventDefault()
+  const handleRegister =async  (e) => {
+    e.preventDefault();
+    console.log(user)
     setClicked(true)
-
-    console.log(user);
-
-
     if (user.password.length < 7) {
-      toast.error("Minimum Password length is 7");
-      setClicked(false)
-      return
+      toast.error("Minimum password length is 7")
+      setClicked(false);
+      return;
     }
-
-
     if (user.password !== user.confirmPassword) {
-      toast.error("Passwords doesn't match");
-      setClicked(false)
-      return
+      toast.error("Password does not match")
+      setClicked(false);
+      return;
     }
 
     try {
-      const {data} = await axios.post(`${BASE_URL}/register`, {...user})
-      console.log(data);
-
-      if (data) {
-        toast.success("Account created successfully")
-        setClicked(false)
-        setUser({
-          password: "",
-          email: "", 
-          confirmPassword: ""
-        })
+      const { data } = await axios.post(`${BASE_URL}/register`, { ...user })
+      if (data.success) {
         redirect("/admin/login")
+        setClicked(false)
       }
-      
     } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.Err)
+      console.log(error)
+      toast.error(error.response?.data?.err)
       setClicked(false)
       setUser({
-        password: "",
-        email: "", 
-        confirmPassword: ""
+        password: '',
+        email: '',
+        confirmPassword: ''
       })
-      
     }
-
   }
+
 
 
   return (
@@ -100,7 +80,7 @@ const SignupForm = () => {
           <p className="text fw-bold fs-4 ">Create an admin account.</p>
           <p>Lets get started by filling out the information below</p>
         </div>
-        <form className="inputs " onSubmit={handleRegister}>
+        <form className="inputs" onSubmit={handleRegister}>
           <div className="mb-3">
             <label htmlFor="email1" className="form-label fs-6">
               Email
@@ -147,7 +127,7 @@ const SignupForm = () => {
 
             <input
               type={show2 ? "text" : "password"}
-             
+              placeholder="........"
               className="w-100 shadow-none"
               value={user.confirmPassword}
               onChange={handleChange}
@@ -167,7 +147,7 @@ const SignupForm = () => {
             type="submit"
             className="btn btn-success text-center w-100 btn-lg"
           >
-            {clicked ? "Creating Account" : "Sign up"}
+            {clicked ? 'Creating account.. ' : 'Sign up'}
           </button>
         </form>
 

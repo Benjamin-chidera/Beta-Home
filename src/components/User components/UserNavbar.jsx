@@ -1,5 +1,5 @@
 import usernavbar from "../../assets/images/UserLogo.png";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 // import Nav from "react-bootstrap/Nav";
 // import Navbar from "react-bootstrap/Navbar";
@@ -17,22 +17,21 @@ const UserNavbar = () => {
   const { propertyId } = useParams();
   const location = useLocation();
   const { isDark, setLightMode } = useGlobalContext();
-
+  const token = localStorage.getItem("token");
   const redirect = useNavigate()
 
-const token = localStorage.getItem("token")
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    redirect("/")
+  }
 
-const handleLogout = () => {
-  localStorage.removeItem("token")
-  redirect("/")
-}
 
   return (
     <div
       className={
         location.pathname === `/properties/${propertyId}` ||
-        location.pathname === "/inspection" ||
-        location.pathname === "/*"
+          location.pathname === "/inspection" ||
+          location.pathname === "/*"
           ? "bg-success w-100 "
           : "bg-transparent UserNavTransparent z-2 position-absolute top-0 w-100"
       }
@@ -108,14 +107,12 @@ const handleLogout = () => {
               </Link>
             </li>
           </ul>
-       {token ? (<div>
-        <button className="btn btn-danger btn-sm" onClick={handleLogout}>Log Out</button>
-       </div>) :   (<div className="d-flex flex-column ms-xxl-5  flex-lg-row  gap-3 align-items-center mt-sm-3 ">
+          {token ? <div><button className="btn btn-danger" onClick={handleLogOut}>Log Out</button></div> : <div className="d-flex flex-column ms-xxl-5  flex-lg-row  gap-3 align-items-center mt-sm-3 ">
             <Link to="/signup">
               <button
                 className={
                   location.pathname === `/properties/${propertyId}` ||
-                  location.pathname === "/inspection"
+                    location.pathname === "/inspection"
                     ? " btn border bg-success text-white px-4 py-2"
                     : "btn border px-4 py-2 text-success bg-white"
                 }
@@ -127,7 +124,7 @@ const handleLogout = () => {
               <button
                 className={
                   location.pathname === `/properties/${propertyId}` ||
-                  location.pathname === "/inspection"
+                    location.pathname === "/inspection"
                     ? "btn bg-white border-0 px-5 py-2 text-success "
                     : "btn text-white px-4 py-2 bg-success"
                 }
@@ -135,7 +132,7 @@ const handleLogout = () => {
                 Log In
               </button>
             </Link>
-          </div>)}
+          </div>}
           {/* </Navbar.Collapse> */}
           {/* </Container> */}
         </nav>
@@ -145,49 +142,3 @@ const handleLogout = () => {
 };
 
 export default UserNavbar;
-
-// {
-//   (" ");
-// }
-// <header className="header d-flex align-items-center justify-content-between gap-5 w-100 px-5 py-4">
-//   <div className="w-25">
-//     <Link to="/">
-//       <img src={usernavbar} alt="usernavlogo" />
-//     </Link>
-//   </div>
-//   <nav className="UserNavbar w-75 ps-4 d-flex justify-content-between align-items-center">
-//     {/* <label htmlFor="menu-toggle" id="hamburger-btn" className="d-block d-lg-none ">
-//         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-//           <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-//         </svg>
-//       </label> */}
-//     <ul className="UserNavLinks text-white d-flex gap-5 mt-2">
-//       <li>
-//         <a href="#" className="text-white">
-//           Home
-//         </a>
-//       </li>
-//       <li>
-//         <a href="#" className="text-white">
-//           Properties
-//         </a>
-//       </li>
-//       <li>
-//         <a href="#" className="text-white">
-//           Contact Us
-//         </a>
-//       </li>
-//       <li>
-//         <a href="#" className="text-white">
-//           Book Now
-//         </a>
-//       </li>
-//     </ul>
-//     <div className="UserNavBtn d-flex gap-5">
-//       <button className="signin btn border text-white px-4 py-2">
-//         Sign In
-//       </button>
-//       <button className="signup btn bg-white px-4 py-2">Login</button>
-//     </div>
-//   </nav>
-// </header>;

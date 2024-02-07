@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../Hooks/useGlobalContext";
 import "../../../styles/User Styles/UserFeature.css";
 import Slider from "react-slick";
@@ -14,57 +14,33 @@ import { GrLink } from "react-icons/gr";
 import { IoMdVideocam } from "react-icons/io";
 import { AiFillPicture } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import Loading from "../../Loading";
 
 
 const UserFeaturedProperties = () => {
+  const [featuredProperties, setFeaturedProperties] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+   
+    const { Base_Url } = useGlobalContext();
 
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        initialSlide: 1,
-        className: "center",
-        centerPadding: "60px",
-        // swipeToSlide: true,
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              // swipeToSlide: true,
-              infinite: true,
-              dots: false,
-              
-            }
-          },
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
-              initialSlide: 2
-            }
-          },
-          {
-            breakpoint: 425,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1
-            }
-          },
-          {
-            breakpoint: 320,
-            settings: {
-              slidesToShow: 1 ,
-              slidesToScroll: 1
-            }
-          }
-        ]
-      };
-    const { properties } = useGlobalContext();
+    const getFeaturedProperties = async () => {
+      try {
+        const {data} = await axios(`${Base_Url}/property/featured`)
+        setFeaturedProperties(data.featuredproperties)
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    useEffect(() => {
+      getFeaturedProperties()
+    }, [])
+
+    if (isLoading) {
+      return <Loading />
+    }
 
   // const sliceProperty = properties.slice(0, 6);
       
@@ -78,16 +54,16 @@ const UserFeaturedProperties = () => {
        
        <div className="card-cover d-flex overflow-x-scroll gap-3 align-items-center">
        {/* <Slider {...settings}> */}
-        {properties.map((property) => {
-          const {_id, image, title, price, location, features: { bedroom, bathroom } } = property;
+        {featuredProperties.map((property) => {
+          const {_id, media: {images}, title, price, location, bedroom, bathroom } = property;
           return (
             <div key={_id}>
-              <div className="card border border-white">
+              <div className="card border border-dark">
                 <div className="featured">Featured</div>
 
                 <div className="forSale">For sale</div>
                 <div className="properties-image">
-                  <img src={image} alt="Properties Image" />
+                  <img src={images[0]} alt="Properties Image" />
                    <div className="inner-icons">
                     <Link to={`/properties/${_id}`}>
                       <GrLink className="icon" />

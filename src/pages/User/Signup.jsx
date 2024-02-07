@@ -1,35 +1,35 @@
 import House from "../../assets/images/House.png";
 import "../../styles/User Styles/Login.css";
-import { FcDataProtection, FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../Hooks/useGlobalContext";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { useState } from "react";
-import {ToastContainer, toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-// import {TailSpin}  from "react-loader-spinner"
+import { useNavigate } from "react-router-dom";
 
 // import search from "../assets/search.png";
 
 const Signup = () => {
-  const { isDark, BASE_URL } = useGlobalContext();
+  const redirect = useNavigate()
+  const { isDark, Base_Url } = useGlobalContext();
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    password: "",
-    email: "", 
-    confirmPassword: ""
+    firstName: '',
+    lastName: '',
+    password: '',
+    email: '',
+    confirmPassword: ''
   })
 
-  const redirect = useNavigate()
-  const [clicked, setClicked] = useState(false)
+  const [clicked, setClicked] = useState(false);
 
   const handleChange = (e) => {
-    setUser({...user, [e.target.name] : e.target.value})
+    setUser({ ...user, [e.target.name]: e.target.value })
   }
 
   const togglePassword = (e) => {
@@ -41,60 +41,47 @@ const Signup = () => {
     setShow2(!show2);
   };
 
-  const handleRegister = async(e) => {
-    e.preventDefault()
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setClicked(true)
-
+    console.log(user)
     if (user.password.length < 7) {
-      toast.error("Minimum Password length is 7");
-      setClicked(false)
-      return
+      toast.error("Minimum password length is 7")
+      setClicked(false);
+      return;
     }
-
-
     if (user.password !== user.confirmPassword) {
-      toast.error("Passwords doesn't match");
-      setClicked(false)
-      return
+      toast.error("Password does not match")
+      setClicked(false);
+      return;
     }
-
 
     try {
-      const {data} = await axios.post(`${BASE_URL}/register`, {...user})
-      console.log(data);
-
-      if (data) {
-        toast.success("Account created successfully")
+      const { data } = await axios.post(`${Base_Url}/register`, { ...user })
+      if (data.success) {
+        // toast.success("Account Created")
+        // navigate to login page
+        redirect("/login")
         setClicked(false)
-        setUser({
-          firstName: "",
-          lastName: "",
-          password: "",
-          email: "", 
-          confirmPassword: ""
-        })
-        // redirect("/login")
-        console.log(data);
       }
-      
     } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.Err)
+      console.log(error)
+      toast.error(error.response?.data?.err)
       setClicked(false)
       setUser({
-        firstName: "",
-        lastName: "",
-        password: "",
-        email: "", 
-        confirmPassword: ""
+        firstName: '',
+        lastName: '',
+        password: '',
+        email: '',
+        confirmPassword: ''
       })
-      
     }
-  }
+    // console.log(res)
 
+  }
   return (
     <div className="vh-100 overflow-y-hidden">
-      <ToastContainer/>
+      <ToastContainer />
       <div className={isDark ? "DarkMode" : null}>
         <div className="col-12 d-flex justify-content-between m-auto ">
           <div className="col-md-6 d-flex flex-column justify-content-center container p-lg-5">
@@ -107,18 +94,18 @@ const Signup = () => {
               Lets get started by filling out the information below
             </p>
 
-            <form className="d-flex flex-column gap-3" onSubmit={handleRegister}>
+            <form onSubmit={handleRegister} className="d-flex flex-column gap-3">
               <div className="d-flex flex-wrap gap-3 w-100">
                 <div className="flex-grow-1">
                   <label htmlFor="firstname" className="d-block">
                     First Name
                   </label>
                   <input
+                    name="firstName"
                     type="text"
                     placeholder="John"
                     className="w-100"
                     required
-                    name="firstName"
                     value={user.firstName}
                     onChange={handleChange}
                   />
@@ -128,11 +115,11 @@ const Signup = () => {
                     Last Name
                   </label>
                   <input
+                    name="lastName"
                     type="text"
                     placeholder="Doe"
                     className="w-100"
                     required
-                    name="lastName"
                     value={user.lastName}
                     onChange={handleChange}
                   />
@@ -144,13 +131,13 @@ const Signup = () => {
                   Email
                 </label>
                 <input
+                  name="email"
                   type="email"
                   placeholder="abc@gmail.com"
                   className="w-100"
                   required
-                  name="email"
                   value={user.email}
-                    onChange={handleChange}
+                  onChange={handleChange}
                 />
               </div>
               <div className="w-100 position-relative">
@@ -158,13 +145,12 @@ const Signup = () => {
                   Password
                 </label>
                 <input
+                  name="password"
                   type={show ? "text" : "password"}
-                 
                   className="w-100"
                   required
-                  name="password"
                   value={user.password}
-                    onChange={handleChange}
+                  onChange={handleChange}
                 />
                 <button
                   className="border-none border-0 outline-none bg-transparent position-absolute top-50"
@@ -179,20 +165,19 @@ const Signup = () => {
                   Confirm Password
                 </label>
                 <input
+                  name="confirmPassword"
                   type={show2 ? "text" : "password"}
-                  
                   className="w-100"
                   required
-                  name="confirmPassword"
                   value={user.confirmPassword}
-                    onChange={handleChange}
+                  onChange={handleChange}
                 />
                 <button
                   className="border-none border-0 outline-none bg-transparent position-absolute top-50"
                   style={{ right: "7px", backgroundColor: "transparent" }}
                   onClick={togglePassword2}
                 >
-                  {show2 ? <FaEyeSlash /> : <IoEyeSharp />}
+                  {show ? <IoEyeSharp /> : <FaEyeSlash />  }
                 </button>
               </div>
               <div className="d-flex w-100 align-items-center">
@@ -213,21 +198,8 @@ const Signup = () => {
                 </label>
               </div>
 
-              
-
               <button className="btn bg-success text-white w-100">
-               {clicked ? "Signing up" : " Sign Up"}
-
-                {/* <TailSpin
-  visible={true}
-  height="20"
-  width="80"
-  color="#fff"
-  ariaLabel="tail-spin-loading"
-  radius="1"
-  wrapperStyle={{}}
-  wrapperClass=""
-  /> */}
+                {clicked ? 'Creating account.. ' : 'Sign up'}
               </button>
               <p>
                 Already have an account?{" "}

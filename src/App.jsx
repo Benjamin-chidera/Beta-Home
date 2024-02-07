@@ -7,7 +7,6 @@ import PropertiesDetails from "./pages/User/PropertiesDetails";
 import Signup from "./pages/User/Signup";
 import Login from "./pages/User/Login";
 import Inspection from "./pages/User/Inspection";
-import Private from "./components/Private";
 
 // admin routes
 import ErrorPage from "./pages/ErrorPage";
@@ -19,7 +18,8 @@ import AdminPropertyDetails from "./pages/Admin/AdminPropertyDetails";
 import AdminPropertyEdit from "./pages/Admin/AdminPropertyEdit";
 import SignupForm from "./pages/Admin/AdminSignupForm";
 import SigninForm from "./pages/Admin/AdminSigninForm";
-import AdminPrivate from "./components/AdminPrivate";
+import Private from "./components/Private";
+import AdminPrivate from "./components/Private";
 
 function App() {
   return (
@@ -37,10 +37,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-
             <Route element={<Private/>}>
-
-            <Route path="/inspection" element={<Inspection />} />
+                <Route path="/inspection" element={<Inspection />} />
             </Route>
 
             {/* Admin Routes */}
@@ -50,23 +48,22 @@ function App() {
             <Route path="/admin/signup" element={<SignupForm />} />
 
             {/* ADMIN DASHBOARD ROUTES */}
-            
             <Route element={<AdminPrivate/>}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/add" element={<AddNewProperties />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/add" element={<AddNewProperties />} />
 
-            <Route path="/admin/inspection" element={<AdminInspection />} />
-            <Route path="/admin/properties" element={<AdminProperties />} />
-            <Route
-              path="/admin/edit/:propertyId"
-              element={<AdminPropertyEdit />}
-            />
-            <Route
-              path="/admin/properties/:propertyId"
-              element={<AdminPropertyDetails />}
-            />
+                <Route path="/admin/inspection" element={<AdminInspection />} />
+                <Route path="/admin/properties" element={<AdminProperties />} />
+                <Route
+                  path="/admin/edit/:propertyId"
+                  element={<AdminPropertyEdit />}
+                />
+                <Route
+                  path="/admin/properties/:propertyId"
+                  element={<AdminPropertyDetails />}
+                />
             </Route>
-
+            
             {/* Error Route */}
             <Route path="*" element={<ErrorPage />} />
           </Routes>
